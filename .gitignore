@@ -1,0 +1,15 @@
+# Lazarus/Free Pascal ignore rules
+*.o
+*.ppu
+*.compiled
+*.bak
+*.~*
+lib/
+backup/
+
+# Executables (Windows / Linux / macOS)
+*.exe
+*.dll
+*.so
+*.dylib
+__recovery/

@@ -1,0 +1,253 @@
+object Form1: TForm1
+  Left = 350
+  Height = 485
+  Top = 250
+  Width = 795
+  Caption = 'Form1'
+  ClientHeight = 485
+  ClientWidth = 795
+  Menu = MainMenu1
+  LCLVersion = '4.6.0.0'
+  object PanelStatistik: TPanel
+    Left = -8
+    Height = 487
+    Top = 2
+    Width = 816
+    TabOrder = 3
+    Visible = False
+  end
+  object PanelDashboard: TPanel
+    Left = -8
+    Height = 482
+    Top = 0
+    Width = 808
+    ClientHeight = 482
+    ClientWidth = 808
+    TabOrder = 1
+    OnClick = PanelDashboardClick
+    object Label1: TLabel
+      Left = 152
+      Height = 25
+      Top = 16
+      Width = 468
+      Caption = 'MONITORING SISTEM KEAMANAN KAMPUNG BIUTIPUL'
+      Font.Height = -19
+      ParentFont = False
+      OnClick = Label1Click
+    end
+  end
+  object PanelInput: TPanel
+    Left = 8
+    Height = 480
+    Top = 0
+    Width = 800
+    ClientHeight = 480
+    ClientWidth = 800
+    TabOrder = 0
+    Visible = False
+    object Label2: TLabel
+      Left = 304
+      Height = 25
+      Top = 16
+      Width = 142
+      Caption = 'INPUT LAPORAN'
+      Font.Height = -19
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 64
+      Height = 17
+      Top = 96
+      Width = 35
+      Caption = 'Nama'
+      Font.Height = -13
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 64
+      Height = 17
+      Top = 128
+      Width = 36
+      Caption = 'Lokasi'
+      Font.Height = -13
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 64
+      Height = 17
+      Top = 160
+      Width = 50
+      Caption = 'Kejadian'
+      Font.Height = -13
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 64
+      Height = 17
+      Top = 192
+      Width = 23
+      Caption = 'Jam'
+      Font.Height = -13
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 64
+      Height = 17
+      Top = 224
+      Width = 48
+      Caption = 'Prioritas'
+      Font.Height = -13
+      ParentFont = False
+    end
+    object TextNama: TEdit
+      Left = 128
+      Height = 23
+      Top = 96
+      Width = 318
+      TabOrder = 0
+    end
+    object TextLokasi: TEdit
+      Left = 128
+      Height = 23
+      Top = 128
+      Width = 320
+      TabOrder = 1
+    end
+    object TextKejadian: TEdit
+      Left = 128
+      Height = 23
+      Top = 160
+      Width = 320
+      TabOrder = 2
+    end
+    object TextJam: TEdit
+      Left = 128
+      Height = 23
+      Top = 192
+      Width = 320
+      TabOrder = 3
+    end
+    object CbPriority: TComboBox
+      Left = 128
+      Height = 23
+      Top = 224
+      Width = 100
+      ItemHeight = 15
+      TabOrder = 4
+      OnChange = CbPriorityChange
+    end
+    object Button1: TButton
+      Left = 192
+      Height = 25
+      Top = 288
+      Width = 75
+      Caption = 'Submit'
+      TabOrder = 5
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 344
+      Height = 25
+      Top = 288
+      Width = 75
+      Caption = 'Clear'
+      TabOrder = 6
+    end
+  end
+  object PanelQueue: TPanel
+    Left = -8
+    Height = 486
+    Top = -1
+    Width = 816
+    ClientHeight = 486
+    ClientWidth = 816
+    TabOrder = 2
+    Visible = False
+    object Label8: TLabel
+      Left = 328
+      Height = 25
+      Top = 17
+      Width = 143
+      Caption = 'MENU LAPORAN'
+      Font.Height = -19
+      ParentFont = False
+    end
+    object StringGrid1: TStringGrid
+      Left = 168
+      Height = 188
+      Top = 150
+      Width = 488
+      TabOrder = 0
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 24
+    Top = 8
+    object MenuItem1: TMenuItem
+      Caption = 'File'
+      OnClick = MenuItem1Click
+      object MenuItem7: TMenuItem
+        Caption = 'Save Data'
+      end
+      object MenuItem8: TMenuItem
+        Caption = 'Load Data'
+      end
+      object MenuItem9: TMenuItem
+        Caption = 'Reset Data'
+      end
+      object MenuItem10: TMenuItem
+        Caption = 'Exit'
+      end
+    end
+    object MenuItem2: TMenuItem
+      Caption = 'Laporan'
+      OnClick = MenuItem2Click
+      object MenuItem11: TMenuItem
+        Caption = 'Tambah Laporan'
+        OnClick = MenuItem11Click
+      end
+      object MenuItem12: TMenuItem
+        Caption = 'Lihat Laporan'
+      end
+      object MenuItem13: TMenuItem
+        Caption = 'Cari Laporan'
+      end
+    end
+    object MenuItem3: TMenuItem
+      Caption = 'Queue'
+      object MenuItem14: TMenuItem
+        Caption = 'Process Queue'
+      end
+      object MenuItem15: TMenuItem
+        Caption = 'Lihat Queue'
+      end
+      object MenuItem16: TMenuItem
+        Caption = 'Clear Queue'
+      end
+    end
+    object MenuItem4: TMenuItem
+      Caption = 'Statistik'
+      object MenuItem17: TMenuItem
+        Caption = 'Statistik Kejadian'
+      end
+      object MenuItem18: TMenuItem
+        Caption = 'Jam Rawan'
+      end
+      object MenuItem19: TMenuItem
+        Caption = 'Wilayah Rawan'
+      end
+    end
+    object MenuItem5: TMenuItem
+      Caption = 'Dashboard'
+      object MenuItem20: TMenuItem
+        Caption = 'Refresh Dashboard'
+      end
+      object MenuItem21: TMenuItem
+        Caption = 'Monitoring Aktif'
+      end
+    end
+    object MenuItem6: TMenuItem
+      Caption = 'Exit'
+    end
+  end
+end
