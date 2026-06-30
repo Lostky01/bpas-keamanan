@@ -2,44 +2,36 @@ object Form1: TForm1
   Left = 350
   Height = 485
   Top = 250
-  Width = 795
+  Width = 789
   Caption = 'Form1'
   ClientHeight = 485
-  ClientWidth = 795
+  ClientWidth = 789
   Menu = MainMenu1
   LCLVersion = '4.6.0.0'
-  object PanelStatistik: TPanel
+  OnCreate = FormCreate
+  object PanelQueue: TPanel
     Left = -8
-    Height = 487
-    Top = 2
+    Height = 486
+    Top = -1
     Width = 816
-    TabOrder = 3
+    ClientHeight = 486
+    ClientWidth = 816
+    TabOrder = 2
     Visible = False
-  end
-  object PanelDashboard: TPanel
-    Left = -8
-    Height = 482
-    Top = 0
-    Width = 808
-    ClientHeight = 482
-    ClientWidth = 808
-    TabOrder = 1
-    OnClick = PanelDashboardClick
-    object Label1: TLabel
-      Left = 152
+    object Label8: TLabel
+      Left = 328
       Height = 25
-      Top = 16
-      Width = 468
-      Caption = 'MONITORING SISTEM KEAMANAN KAMPUNG BIUTIPUL'
+      Top = 17
+      Width = 143
+      Caption = 'MENU LAPORAN'
       Font.Height = -19
       ParentFont = False
-      OnClick = Label1Click
     end
   end
   object PanelInput: TPanel
-    Left = 8
+    Left = 0
     Height = 480
-    Top = 0
+    Top = -1
     Width = 800
     ClientHeight = 480
     ClientWidth = 800
@@ -84,7 +76,7 @@ object Form1: TForm1
     object Label6: TLabel
       Left = 64
       Height = 17
-      Top = 192
+      Top = 224
       Width = 23
       Caption = 'Jam'
       Font.Height = -13
@@ -93,7 +85,7 @@ object Form1: TForm1
     object Label7: TLabel
       Left = 64
       Height = 17
-      Top = 224
+      Top = 256
       Width = 48
       Caption = 'Prioritas'
       Font.Height = -13
@@ -120,64 +112,180 @@ object Form1: TForm1
       Width = 320
       TabOrder = 2
     end
-    object TextJam: TEdit
-      Left = 128
-      Height = 23
-      Top = 192
-      Width = 320
-      TabOrder = 3
-    end
     object CbPriority: TComboBox
       Left = 128
       Height = 23
-      Top = 224
-      Width = 100
+      Top = 256
+      Width = 136
       ItemHeight = 15
-      TabOrder = 4
+      TabOrder = 3
       OnChange = CbPriorityChange
     end
     object Button1: TButton
       Left = 192
       Height = 25
-      Top = 288
+      Top = 320
       Width = 75
       Caption = 'Submit'
-      TabOrder = 5
+      TabOrder = 4
       OnClick = Button1Click
     end
     object Button2: TButton
       Left = 344
       Height = 25
-      Top = 288
+      Top = 320
       Width = 75
       Caption = 'Clear'
+      TabOrder = 5
+    end
+    object TimeEdit1: TTimeEdit
+      Left = 128
+      Height = 23
+      Top = 224
+      Width = 137
+      ButtonWidth = 23
+      NumGlyphs = 1
+      MaxLength = 0
       TabOrder = 6
+      Text = 'TimeEdit1'
+    end
+    object Label9: TLabel
+      Left = 64
+      Height = 15
+      Top = 193
+      Width = 42
+      Caption = 'Tanggal'
+    end
+    object DateEdit1: TDateEdit
+      Left = 128
+      Height = 23
+      Top = 192
+      Width = 136
+      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+      DateOrder = doNone
+      ButtonWidth = 23
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 7
+      Text = 'DateEdit1'
     end
   end
-  object PanelQueue: TPanel
+  object PanelJamRawan: TPanel
     Left = -8
-    Height = 486
-    Top = -1
-    Width = 816
-    ClientHeight = 486
-    ClientWidth = 816
-    TabOrder = 2
+    Height = 485
+    Top = 1
+    Width = 811
+    TabOrder = 3
     Visible = False
-    object Label8: TLabel
-      Left = 328
+  end
+  object PanelDashboard: TPanel
+    Left = -8
+    Height = 482
+    Top = 2
+    Width = 808
+    ClientHeight = 482
+    ClientWidth = 808
+    TabOrder = 1
+    OnClick = PanelDashboardClick
+    object Label1: TLabel
+      Left = 160
       Height = 25
-      Top = 17
-      Width = 143
-      Caption = 'MENU LAPORAN'
+      Top = 24
+      Width = 489
+      Caption = 'MONITORING SISTEM KEAMANAN KAMPUNG BIUTIPUL'
+      Font.CharSet = ANSI_CHARSET
       Font.Height = -19
+      Font.Name = 'Segoe UI Semibold'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
       ParentFont = False
+      OnClick = Label1Click
     end
     object StringGrid1: TStringGrid
-      Left = 168
-      Height = 188
-      Top = 150
-      Width = 488
+      Left = 80
+      Height = 136
+      Top = 120
+      Width = 648
+      ColCount = 8
+      RowCount = 1
       TabOrder = 0
+      ColWidths = (
+        32
+        111
+        114
+        110
+        72
+        72
+        68
+        64
+      )
+    end
+  end
+  object PanelStatistik: TPanel
+    Left = -24
+    Height = 487
+    Top = -2
+    Width = 816
+    ClientHeight = 487
+    ClientWidth = 816
+    TabOrder = 4
+    Visible = False
+    OnClick = PanelStatistikClick
+    object Chart1: TChart
+      Left = 144
+      Height = 277
+      Top = 112
+      Width = 448
+      AxisList = <      
+        item
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Alignment = calBottom
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      object Chart1BarSeries1: TBarSeries
+        BarBrush.Color = clRed
+      end
+    end
+    object Label10: TLabel
+      Left = 304
+      Height = 25
+      Top = 32
+      Width = 250
+      Caption = 'Statistik Laporan Kampung ...'
+      Font.CharSet = ANSI_CHARSET
+      Font.Height = -19
+      Font.Name = 'Segoe UI Semibold'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label11: TLabel
+      Left = 120
+      Height = 85
+      Top = 200
+      Width = 18
+      Caption = 'Jumlah Kejadian'
+      Font.Orientation = 900
+      ParentFont = False
+    end
+    object Label12: TLabel
+      Left = 344
+      Height = 15
+      Top = 400
+      Width = 82
+      Caption = 'Waktu Kejadian'
     end
   end
   object MainMenu1: TMainMenu
@@ -186,68 +294,86 @@ object Form1: TForm1
     object MenuItem1: TMenuItem
       Caption = 'File'
       OnClick = MenuItem1Click
-      object MenuItem7: TMenuItem
+      object SaveData: TMenuItem
         Caption = 'Save Data'
+        OnClick = SaveDataClick
       end
-      object MenuItem8: TMenuItem
+      object LoadData: TMenuItem
         Caption = 'Load Data'
+        OnClick = LoadDataClick
       end
-      object MenuItem9: TMenuItem
+      object ResetData: TMenuItem
         Caption = 'Reset Data'
       end
-      object MenuItem10: TMenuItem
+      object ExitFunc: TMenuItem
         Caption = 'Exit'
       end
     end
     object MenuItem2: TMenuItem
       Caption = 'Laporan'
       OnClick = MenuItem2Click
-      object MenuItem11: TMenuItem
+      object AddLaporanMenu: TMenuItem
         Caption = 'Tambah Laporan'
-        OnClick = MenuItem11Click
+        OnClick = AddLaporanMenuClick
       end
-      object MenuItem12: TMenuItem
+      object LihatLaporan: TMenuItem
         Caption = 'Lihat Laporan'
       end
-      object MenuItem13: TMenuItem
+      object CariLaporan: TMenuItem
         Caption = 'Cari Laporan'
       end
     end
     object MenuItem3: TMenuItem
       Caption = 'Queue'
-      object MenuItem14: TMenuItem
+      object MenuProcessQueue: TMenuItem
         Caption = 'Process Queue'
+        OnClick = MenuProcessQueueClick
       end
       object MenuItem15: TMenuItem
         Caption = 'Lihat Queue'
       end
-      object MenuItem16: TMenuItem
+      object ClearQueueFunc: TMenuItem
         Caption = 'Clear Queue'
       end
     end
     object MenuItem4: TMenuItem
       Caption = 'Statistik'
-      object MenuItem17: TMenuItem
+      object MenuStatistik: TMenuItem
         Caption = 'Statistik Kejadian'
+        OnClick = MenuStatistikClick
       end
-      object MenuItem18: TMenuItem
+      object MenuJamRawan: TMenuItem
         Caption = 'Jam Rawan'
+        OnClick = MenuJamRawanClick
       end
-      object MenuItem19: TMenuItem
+      object WilayahRawanMenu: TMenuItem
         Caption = 'Wilayah Rawan'
       end
     end
     object MenuItem5: TMenuItem
       Caption = 'Dashboard'
-      object MenuItem20: TMenuItem
-        Caption = 'Refresh Dashboard'
+      object MenuDashboard: TMenuItem
+        Caption = 'Dashoard'
+        OnClick = MenuDashboardClick
       end
-      object MenuItem21: TMenuItem
+      object MenuRefreshDashboard: TMenuItem
+        Caption = 'Refresh Dashboard'
+        OnClick = MenuRefreshDashboardClick
+      end
+      object MenuMonitoringAktif: TMenuItem
         Caption = 'Monitoring Aktif'
       end
     end
     object MenuItem6: TMenuItem
       Caption = 'Exit'
     end
+  end
+  object SaveDialog1: TSaveDialog
+    Left = 80
+    Top = 8
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 144
+    Top = 8
   end
 end
