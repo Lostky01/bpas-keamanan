@@ -20,6 +20,22 @@ uses
       status: string;
     end;
 
+    TPetugas = record
+      NamaWarga: string[50];
+    end;
+
+    TQueuePetugas = record
+      Data: array[1..100] of TPetugas;
+      Depan: Integer;
+      Belakang: Integer;
+    end;
+
+    TJadwalRonda = record
+      Hari: string[15];
+      Petugas1: string[50];
+      Petugas2: string[50];
+    end;
+
 type
 
   { TForm1 }
@@ -38,7 +54,9 @@ type
     Label9: TLabel;
     MenuDashboard: TMenuItem;
     OpenDialog1: TOpenDialog;
+    Panel1: TPanel;
     PanelJamRawan: TPanel;
+    PanelQueue: TPanel;
     SaveDialog1: TSaveDialog;
     StringGrid1: TStringGrid;
     TextNama: TEdit;
@@ -59,7 +77,6 @@ type
     CariLaporan: TMenuItem;
     MenuProcessQueue: TMenuItem;
     MenuItem15: TMenuItem;
-    ClearQueueFunc: TMenuItem;
     MenuStatistik: TMenuItem;
     MenuJamRawan: TMenuItem;
     TimeEdit1: TTimeEdit;
@@ -74,7 +91,7 @@ type
     SaveData: TMenuItem;
     LoadData: TMenuItem;
     ResetData: TMenuItem;
-    PanelQueue: TPanel;
+    PanelJadwal: TPanel;
     PanelStatistik: TPanel;
     PanelInput: TPanel;
     PanelDashboard: TPanel;
@@ -92,6 +109,7 @@ type
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuStatistikClick(Sender: TObject);
     procedure PanelDashboardClick(Sender: TObject);
+    procedure PanelQueueClick(Sender: TObject);
     procedure PanelStatistikClick(Sender: TObject);
     procedure SaveDataClick(Sender: TObject);
     procedure ToggleBox1Change(Sender: TObject);
@@ -130,6 +148,131 @@ begin
     jam := HourOf(laporan[i].jam);
     Inc(statistikJam[jam]);
   end;
+end;
+
+procedure Enqueue(var Q: TQueuePetugas; P: TPetugas);
+begin
+  if Q.Belakang < 100 then
+  begin
+    Inc(Q.Belakang);
+    Q.Data[Q.Belakang] := P;
+    if Q.Depan = 0 then Q.Depan := 1;
+  end;
+end;
+
+function Dequeue(var Q: TQueuePetugas): TPetugas;
+begin
+  Result.NamaWarga := '';
+  if (Q.Depan <> 0) and (Q.Depan <= Q.Belakang) then
+  begin
+    Result := Q.Data[Q.Depan];
+    Inc(Q.Depan);
+    if Q.Depan > Q.Belakang then
+    begin
+      Q.Depan := 0; Q.Belakang := 0;
+    end;
+  end;
+end;
+
+
+// ==========================================
+// 3. PROSEDUR TOMBOL JADWAL (TAMBAHKAN DI SINI)
+// ==========================================
+procedure TForm1.BtnGenerateOtomatisClick(Sender: TObject);
+var
+  Q: TQueuePetugas;
+  FPetugas: file of TPetugas;
+  FJadwal: file of TJadwalRonda;
+  P, P1, P2: TPetugas;
+  JadwalHariIni: TJadwalRonda;
+  DaftarHari: array[1..7] of string = ('Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu');
+  i: Integer;
+begin
+  Q.Depan := 0; Q.Belakang := 0;
+
+  AssignFile(FPetugas, 'petugas.dat');
+  {$I-} Reset(FPetugas); {$I+}
+  if IOResult = 0 then
+  begin
+    while not Eof(FPetugas) do
+    begin
+      Read(FPetugas, P);
+      Enqueue(Q, P);
+    end;
+    CloseFile(FPetugas);
+  end;
+
+  if (Q.Belakang - Q.Depan + 1) < 2 then
+  begin
+    ShowMessage('Isi daftar petugas minimal 2 orang terlebih dahulu!');
+    Exit;
+  end;
+
+  AssignFile(FJadwal, 'jadwal.dat');
+  Rewrite(FJadwal);
+
+  for i := 1 to 7 do
+  begin
+    P1 := Dequeue(Q);
+    P2 := Dequeue(Q);
+
+    if P1.NamaWarga = '' then P1.NamaWarga := 'Warga Bergantian';
+    if P2.NamaWarga = '' then P2.NamaWarga := 'Warga Bergantian';
+
+    JadwalHariIni.Hari := DaftarHari[i];
+    JadwalHariIni.Petugas1 := P1.NamaWarga;
+    JadwalHariIni.Petugas2 := P2.NamaWarga;
+    Write(FJadwal, JadwalHariIni);
+
+    if P1.NamaWarga <> 'Warga Bergantian' then Enqueue(Q, P1);
+    if P2.NamaWarga <> 'Warga Bergantian' then Enqueue(Q, P2);
+  end;
+  CloseFile(FJadwal);
+
+  AssignFile(FPetugas, 'petugas.dat');
+  Rewrite(FPetugas);
+  while (Q.Depan <> 0) and (Q.Depan <= Q.Belakang) do
+  begin
+    P := Dequeue(Q);
+    Write(FPetugas, P);
+  end;
+  CloseFile(FPetugas);
+
+  TampilkanJadwalKeGrid;
+  ShowMessage('Jadwal Otomatis Berhasil Dibuat!');
+end;
+
+
+// ==========================================
+// 4. PROSEDUR TAMPILKAN GRID (TAMBAHKAN DI SINI)
+// ==========================================
+procedure TForm1.TampilkanJadwalKeGrid;
+var
+  FJadwal: file of TJadwalRonda;
+  J: TJadwalRonda;
+  Baris: Integer;
+begin
+  // Sesuaikan nama 'StringGridJadwal' dengan nama komponen grid kamu di UI
+  StringGridJadwal.RowCount := 8;
+  StringGridJadwal.ColCount := 3;
+  StringGridJadwal.Cells[0, 0] := 'Hari';
+  StringGridJadwal.Cells[1, 0] := 'Petugas 1';
+  StringGridJadwal.Cells[2, 0] := 'Petugas 2';
+
+  AssignFile(FJadwal, 'jadwal.dat');
+  {$I-} Reset(FJadwal); {$I+}
+  if IOResult <> 0 then Exit;
+
+  Baris := 1;
+  while not Eof(FJadwal) do
+  begin
+    Read(FJadwal, J);
+    StringGridJadwal.Cells[0, Baris] := J.Hari;
+    StringGridJadwal.Cells[1, Baris] := J.Petugas1;
+    StringGridJadwal.Cells[2, Baris] := J.Petugas2;
+    Inc(Baris);
+  end;
+  CloseFile(FJadwal);
 end;
 
 procedure TForm1.TampilkanChart;
@@ -209,7 +352,7 @@ begin
   if CbPriority.Items.Count = 0 then FormCreate(Self);
   PanelDashboard.Visible := False;
   PanelInput.Visible := True;
-  PanelQueue.Visible := False;
+  PanelJadwal.Visible := False;
   PanelStatistik.Visible := False;
   PanelJamRawan.Visible := False;
 end;
@@ -296,7 +439,7 @@ begin
   TampilkanChart;
   UpdateGrid;
   PanelDashboard.Visible := True;
-  PanelQueue.Visible := False;
+  PanelJadwal.Visible := False;
   PanelStatistik.Visible := False;
   PanelJamRawan.Visible := False;
 end;
@@ -322,7 +465,7 @@ begin
   UpdateGrid;
   PanelDashboard.Visible := True;
   PanelInput.Visible := False;
-  PanelQueue.Visible := False;
+  PanelJadwal.Visible := False;
   PanelStatistik.Visible := False;
   PanelJamRawan.Visible := False;
 end;
@@ -336,13 +479,18 @@ begin
   HitungStatistikJam;
   TampilkanChart;
   PanelDashboard.Visible := False;
-  PanelQueue.Visible := False;
+  PanelJadwal.Visible := False;
   PanelStatistik.Visible := True;
   PanelJamRawan.Visible := False;
 end;
 
 procedure TForm1.PanelDashboardClick(Sender: TObject);
 begin
+end;
+
+procedure TForm1.PanelJadwalClick(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.PanelStatistikClick(Sender: TObject);
